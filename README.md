@@ -26,6 +26,13 @@
   <li>🌈 Beautiful modern UI with animated feedback</li>
 </ul>
 
+## 📦 Dataset
+
+[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-HBFMID-blue?logo=kaggle)](https://www.kaggle.com/datasets/orvile/human-bone-fractures-image-dataset-hbfmid)
+
+This project is based on the [Human Bone Fractures Multi-modal Image Dataset (HBFMID)](https://www.kaggle.com/datasets/orvile/human-bone-fractures-image-dataset-hbfmid), a collection of X-ray images representing 10 types of bone fractures.
+
+
 
 ## 📁 Project Structure
 
