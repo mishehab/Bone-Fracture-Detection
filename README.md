@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img src="https://via.placeholder.com/400x300?text=Upload+X-ray+Image" width="400" alt="Preview Image">
+ <img src="preview.png" width="500" alt="App Screenshot">
 </p>
 
 ---
@@ -27,19 +27,18 @@
 </ul>
 
 ---
-
 ## 📁 Project Structure
 
+```bash
 bone-fracture-detection/
-├── app.py # Flask backend API
-├── human_bone_fractures_image.ipynb # Notebook for train the model
-├── yolov8n-fracture.pt # Trained YOLOv8 model
+├── app.py                         # Flask backend API
+├── human_bone_fractures_image.ipynb  # Notebook used to train the model
+├── yolov8n-fracture.pt            # Trained YOLOv8 model
 ├── templates/
-│ └── index.html # Frontend HTML interface
-├── static/ # (Optional) folder for CSS/JS
-├── uploads/ # Temporary storage for uploaded images
-└── README.md # Project description
-
+│   └── index.html                 # Frontend HTML interface
+├── static/                        # (Optional) folder for CSS/JS
+├── uploads/                       # Temporary storage for uploaded images
+└── README.md                      # Project description
 
 ---
 
@@ -47,7 +46,7 @@ bone-fracture-detection/
 
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/yourusername/bone-fracture-detection.git
+   git clone https://github.com/mishehab/bone-fracture-detection.git
    cd bone-fracture-detection
 
 2. **Install Python Dependencies**
