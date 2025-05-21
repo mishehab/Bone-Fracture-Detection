@@ -3,7 +3,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/AI%20Model-YOLOv8-blue?style=flat-square" alt="Model Badge">
   <img src="https://img.shields.io/badge/Framework-Flask-orange?style=flat-square" alt="Framework">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
 </p>
 
 <p align="center">
