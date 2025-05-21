@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bone Fracture Detector</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #cfe9f5, #a0d2eb, #f5faff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #ffffffee;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      margin: 20px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    button {
+      background: #007bff;
+      color: #fff;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+
+    #preview {
+      margin-top: 25px;
+      display: block;
+      max-width: 100%;
+      max-height: 360px;
+      border: 3px solid #ddd;
+      border-radius: 10px;
+      object-fit: contain;
+      animation: fadeIn 0.4s ease;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #28a745;
+      min-height: 24px;
+    }
+
+    .spinner {
+      margin-top: 20px;
+      display: none;
+    }
+    .spinner i {
+      font-size: 32px;
+      animation: spin 1s linear infinite;
+      color: #007bff;
+    }
+
+    #download-btn {
+      display: none;
+      margin-top: 20px;
+      background-color: #28a745;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #download-btn:hover {
+      background: #1e7e34;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1><i class="fas fa-x-ray"></i> Bone Fracture Detection</h1>
+
+    <form id="upload-form" enctype="multipart/form-data">
+      <input type="file" name="image" id="image-input" accept="image/*" required>
+      <br>
+      <button type="submit"><i class="fas fa-magnifying-glass-chart"></i> Detect Fracture</button>
+    </form>
+
+    <div class="spinner" id="spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Processing...</p>
+    </div>
+
+    <!-- Placeholder image shown before upload -->
+    <img
+      id="preview"
+      src="https://via.placeholder.com/400x300?text=Upload+X-ray+Image"
+      alt="Upload preview"
+    >
+
+    <div id="result">Prediction result will appear here.</div>
+
+    <button id="download-btn"><i class="fas fa-download"></i> Download Report</button>
+  </div>
+
+  <script>
+    const form       = document.getElementById('upload-form');
+    const input      = document.getElementById('image-input');
+    const preview    = document.getElementById('preview');
+    const spinner    = document.getElementById('spinner');
+    const resultDiv  = document.getElementById('result');
+    const downloadBtn= document.getElementById('download-btn');
+
+    const classNames = [
+      "Comminuted","Greenstick","Healthy","Linear",
+      "Oblique Displaced","Oblique","Segmental","Spiral",
+      "Transverse Displaced","Transverse"
+    ];
+
+    let currentPrediction = "";
+
+    // Update preview on file select
+    input.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => preview.src = e.target.result;
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = "https://via.placeholder.com/400x300?text=Upload+X-ray+Image";
+      }
+    });
+
+    // Handle form submit / prediction
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      resultDiv.textContent = '';
+      spinner.style.display = 'block';
+      downloadBtn.style.display = 'none';
+
+      fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        spinner.style.display = 'none';
+
+        if (data.error) {
+          resultDiv.textContent = `❌ Error: ${data.error}`;
+          resultDiv.style.color = 'red';
+        } else if (data.predictions.length) {
+          const names = data.predictions.map(i => classNames[i]);
+          currentPrediction = names.join(', ');
+          resultDiv.innerHTML = `✅ Prediction: <b>${currentPrediction}</b>`;
+          resultDiv.style.color = '#28a745';
+          downloadBtn.style.display = 'inline-block';
+        } else {
+          currentPrediction = 'No fracture detected.';
+          resultDiv.textContent = '🟡 No fracture detected.';
+          resultDiv.style.color = '#ffc107';
+          downloadBtn.style.display = 'inline-block';
+        }
+      })
+      .catch(err => {
+        spinner.style.display = 'none';
+        resultDiv.textContent = '❌ Prediction failed.';
+        resultDiv.style.color = 'red';
+        console.error(err);
+      });
+    });
+
+    // Download text report
+    downloadBtn.addEventListener('click', function () {
+      const report = `
+--- Bone Fracture Detection Report ---
+Date: ${new Date().toLocaleString()}
+Result: ${currentPrediction}
+`;
+      const blob = new Blob([report], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'fracture_report.txt';
+      link.click();
+    });
+  </script>
+
+</body>
+</html>
