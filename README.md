@@ -14,19 +14,19 @@
  <img src="preview.png" width="500" alt="App Screenshot">
 </p>
 
----
+
 
 ## 🚀 Features
 
 <ul>
   <li>🧠 YOLOv8 model trained on 10 fracture classes</li>
   <li>📸 Upload and preview X-ray images</li>
-  <li>🔍 Predict fractures and display the class(es)</li>
+  <li>🔍 Predict fractures and display the classes</li>
   <li>📄 Downloadable text report after prediction</li>
   <li>🌈 Beautiful modern UI with animated feedback</li>
 </ul>
 
----
+
 ## 📁 Project Structure
 
 ```bash
@@ -39,8 +39,8 @@ bone-fracture-detection/
 ├── static/                        # (Optional) folder for CSS/JS
 ├── uploads/                       # Temporary storage for uploaded images
 └── README.md                      # Project description
+```
 
----
 
 ## 🧪 How to Run Locally
 
@@ -61,7 +61,7 @@ bone-fracture-detection/
 
 4. **Open your browser and visit**
 
-http://127.0.0.1:5000/
+    http://127.0.0.1:5000/
 
 5. **Upload an X-ray Image**
 
@@ -71,20 +71,22 @@ http://127.0.0.1:5000/
   <li>View the result and download the report</li>
 </ul>
 
-🧠 Model Classes Detected
-Class ID	Fracture Type
-0	Comminuted
-1	Greenstick
-2	Healthy
-3	Linear
-4	Oblique Displaced
-5	Oblique
-6	Segmental
-7	Spiral
-8	Transverse Displaced
-9	Transverse
+## 🧠 Model Classes Detected
+
+- `0` → Comminuted  
+- `1` → Greenstick  
+- `2` → Healthy  
+- `3` → Linear  
+- `4` → Oblique Displaced  
+- `5` → Oblique  
+- `6` → Segmental  
+- `7` → Spiral  
+- `8` → Transverse Displaced  
+- `9` → Transverse  
+
 
 🌟 Future Ideas
+
 ✅ Add doctor recommendation output
 
 ✅ Support image annotations or bounding boxes
